@@ -21,7 +21,7 @@ export default function CaseStudyPortfolio() {
           <div className="mb-12">
             <h2 className="text-3xl font-bold mb-4">The Problem</h2>
             <p className="text-lg text-gray-300">
-              I needed a portfolio that wasn't just a static resume. I wanted to 
+              I needed a portfolio that wasn&apos;t just a static resume. I wanted to 
               demonstrate my skills as a technical, product-minded PM by building 
               the portfolio itself as a product.
             </p>
@@ -38,7 +38,7 @@ export default function CaseStudyPortfolio() {
               <li><strong>Next.js (React):</strong> For a fast, component-based frontend.</li>
               <li><strong>Python (FastAPI):</strong> To create a serverless backend API to power the AI.</li>
               <li><strong>Vercel:</strong> For seamless CI/CD (Continuous Integration / Continuous Deployment).</li>
-              <li><strong>Git & GitHub:</strong> For version control, following a 'commit small, commit often' workflow.</li>
+              <li><strong>Git & GitHub:</strong> For version control, following a &apos;commit small, commit often&apos; workflow.</li>
             </ul>
           </div>
   
@@ -46,7 +46,7 @@ export default function CaseStudyPortfolio() {
           <div className="mb-12">
             <h2 className="text-3xl font-bold mb-4">The Outcome</h2>
             <p className="text-lg text-gray-300">
-              The result is the site you're on right now. A 100% free-to-host, 
+              The result is the site you&apos;re on right now. A 100% free-to-host, 
               serverless web application that I can update just by pushing to GitHub.
               The AI chatbot is fully functional and streams responses from my Python API.
             </p>
