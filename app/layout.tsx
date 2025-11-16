@@ -5,9 +5,9 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
 
 export const metadata = {
-  title: "AI SDK Python Streaming Preview",
+  title: "Fran Chaves - Growth & PM Portfolio",
   description:
-    "Use the Data Stream Protocol to stream chat completions from a Python endpoint (FastAPI) and display them using the useChat hook in your Next.js application.",
+    "Welcome to my portfolio. See my case studies, product philosophy, and AI projects.",
   openGraph: {
     images: [
       {

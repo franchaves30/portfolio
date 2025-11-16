@@ -1,24 +1,50 @@
-"use client";
+import Link from 'next/link'
 
-import { Button } from "./ui/button";
-import { GitIcon, VercelIcon } from "./icons";
-import Link from "next/link";
-
-export const Navbar = () => {
+export function Navbar() {
   return (
-    <div className="p-2 flex flex-row gap-2 justify-between">
-      <Link href="https://github.com/vercel-labs/ai-sdk-preview-python-streaming">
-        <Button variant="outline">
-          <GitIcon /> View Source Code
-        </Button>
+    <nav className="w-full max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+      
+      {/* Left Side: Your Name/Logo */}
+      <Link href="/" className="text-xl font-bold">
+        Fran Chaves
       </Link>
 
-      <Link href="https://vercel.com/new/clone?repository-url=https://github.com/vercel-labs/ai-sdk-preview-python-streaming">
-        <Button>
-          <VercelIcon />
-          Deploy with Vercel
-        </Button>
-      </Link>
-    </div>
-  );
-};
+      {/* Right Side: Navigation Links */}
+      <div className="flex items-center space-x-6">
+        <Link href="/" className="text-gray-400 hover:text-white">
+          Home
+        </Link>
+        <Link href="/case-studies" className="text-gray-400 hover:text-white">
+          Case Studies
+        </Link>
+        <Link href="/about" className="text-gray-400 hover:text-white">
+          About
+        </Link>
+
+        {/* === HIDDEN LINKS === */}
+        {/* These are commented out. To "un-hide" them, just remove the {/* and *\/}
+        
+        {/*
+        <Link href="/blog" className="text-gray-400 hover:text-white">
+          Blog
+        </Link>
+
+        <Link href="/resume.pdf" target="_blank" className="text-gray-400 hover:text-white">
+          Resume
+        </Link>
+        */}
+        {/* === END HIDDEN LINKS === */}
+
+
+        {/* CTA Button: Links to your LinkedIn */}
+        <Link 
+          href="https://www.linkedin.com/in/francisco-chaves" 
+          target="_blank" 
+          className="px-4 py-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+        >
+          Contact
+        </Link>
+      </div>
+    </nav>
+  )
+}
