@@ -1,41 +1,22 @@
-// This is your correct "named export" import
-import { Chat } from "@/components/chat";
-import Link from "next/link";
+// This is your new Case Studies Gallery Page
+// File: app/case-studies/page.tsx
 
-// This is your correct function name
-export default function Page() {
+import Link from "next/link"; // <-- Don't forget to import Link!
+
+export default function CaseStudiesPage() {
   return (
-    // This is the new <main> wrapper to hold everything
-    <main className="flex flex-col items-center p-12 md:p-12">
-      
-      {/* === THIS IS YOUR NEW HEADER === */}
-      <div className="w-full max-w-5xl mb-16 text-left">
-        <h1 className="text-4xl font-bold tracking-tight mb-2">
-          Fran Chaves - Growth PM Portfolio
-        </h1>
-        <p className="text-xl text-gray-400">
-          Welcome to my (wip) site. Here are my case studies.
-        </p>
-      </div>
-      {/* === END OF NEW HEADER === */}
-
-      {/* This is your original Chat component, now in its own <div> */}
-      <div className="w-full max-w-5xl flex flex-col">
-        <Chat />
-      </div>
-      {/* === START: FEATURED CASE STUDIES SECTION === */}
-      
-      <div className="w-full max-w-5xl mt-24 text-left">
+    <main className="flex flex-col items-center p-12 md:p-24">
+      <div className="w-full max-w-5xl text-left">
         
-        {/* Section Title */}
-        <h2 className="text-3xl font-bold mb-8">
-          Featured Case Studies
-        </h2>
+        {/* Main Title */}
+        <h1 className="text-4xl font-bold mb-12">
+          Case Studies
+        </h1>
 
         {/* Grid for the cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           
-          {/* Card 1: Your Portfolio (This is a great first case study!) */}
+          {/* Card 1: Your Portfolio */}
           <Link 
             href="/case-studies/how-i-built-this-portfolio" 
             className="block p-6 bg-gray-800 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors"
@@ -60,9 +41,10 @@ export default function Page() {
             <span className="font-semibold text-white">Read Case Study &rarr;</span>
           </a>
 
+          {/* Add more cards here as you build them... */}
+
         </div>
       </div>
-      {/* === END: FEATURED CASE STUDIES SECTION === */}
     </main>
   );
 }
