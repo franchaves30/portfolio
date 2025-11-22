@@ -3,6 +3,7 @@ import { GeistSans } from "geist/font/sans";
 import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
+import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
   title: "Fran Chaves - Growth & PM Portfolio",
@@ -37,6 +38,7 @@ export default function RootLayout({
         <Toaster position="top-center" richColors />
         <Navbar />
         {children}
+        <Analytics />
       </body>
     </html>
   );
