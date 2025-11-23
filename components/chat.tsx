@@ -94,7 +94,7 @@ export function Chat() {
         </div>
         <div>
           <h3 className="font-semibold text-white">Portfolio Assistant</h3>
-          <p className="text-xs text-gray-400">Ask me anything about Fran's experience</p>
+          <p className="text-xs text-gray-400">Ask me anything about Fran&apos;s experience</p>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export function Chat() {
               <Bot className="w-8 h-8 text-white" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">Hello! I'm Fran's AI Assistant.</h2>
+              <h2 className="text-xl font-semibold text-white">Hello! I&apos;m Fran&apos;s AI Assistant.</h2>
               <p className="text-gray-400 max-w-sm mx-auto">
                 I can tell you about his experience, skills, and projects. What would you like to know?
               </p>
