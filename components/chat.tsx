@@ -18,7 +18,9 @@ export function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    if (messages.length > 0) {
+      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+    }
   }, [messages]);
 
   const handleLocalSubmit = async (e: React.FormEvent) => {
@@ -85,7 +87,7 @@ export function Chat() {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-4xl mx-auto bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl min-h-[500px] h-[70vh] max-h-[800px] relative">
+    <div className="flex flex-col w-full max-w-4xl mx-auto bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl h-[calc(100dvh-200px)] md:h-[70vh] min-h-[400px] max-h-[800px] relative">
 
       {/* HEADER */}
       <div className="flex-none p-4 border-b border-white/10 bg-white/5 flex items-center gap-3 z-10">

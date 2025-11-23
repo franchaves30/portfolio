@@ -3,8 +3,8 @@ import { Chat } from "@/components/chat"; // Importamos el nuevo componente limp
 
 export default function Page() {
   return (
-    <main className="flex flex-col items-center p-12 md:p-24">
-      
+    <main className="flex flex-col items-center p-6 md:p-24">
+
       {/* HEADER */}
       <div className="w-full max-w-5xl mb-12 text-left">
         <h1 className="text-4xl font-bold tracking-tight mb-2">
@@ -27,8 +27,8 @@ export default function Page() {
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card 1 */}
-          <Link 
-            href="/case-studies/how-i-built-this-portfolio" 
+          <Link
+            href="/case-studies/how-i-built-this-portfolio"
             className="block p-6 bg-gray-800 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors"
           >
             <h3 className="text-2xl font-bold mb-3">
