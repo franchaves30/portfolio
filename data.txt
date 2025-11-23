@@ -1,0 +1,60 @@
+[PROFILE SUMMARY]
+Name: Fran Chaves
+Role: Growth Product Manager & AI Product Leader
+Location: Valencia, Spain (Remote)
+Core Mission: To bridge human insight with machine intelligence to build truly intuitive systems. [cite_start]I focus on driving non-linear B2B growth by embracing uncertainty over predictable tactics[cite: 6, 7, 55].
+Philosophy: I believe technology should serve as a bridge to improve people's lives. My career has been about understanding people and building solutions to their problems. [cite_start]Today, I see AI as the most profound disruptive force for continuing that mission[cite: 57, 58].
+
+[CORE SKILLS]
+[cite_start]AI & Technical Stack: Python, OpenAI API, Google Gemini API, LangGraph (for agentic workflows), Model Context Protocol (MCP), RAG Architecture, Vector Databases, Algolia[cite: 8, 12, 13].
+[cite_start]Growth & Product: Product-Led Growth (PLG), Sales-Led Growth (SLG), A/B Testing, Non-Linear Experimentation, Revenue Optimization, Lead Scoring, Funnel Analysis[cite: 14, 267].
+[cite_start]Data & Analytics: SQL, Google Analytics, Mixpanel, User Behavior Modeling, Predictive Modeling[cite: 205, 237, 268].
+[cite_start]Languages: Spanish (Native), English (Full Professional), Portuguese (Limited Working)[cite: 38, 39, 40].
+
+[CURRENT EXPERIENCE - TESTGORILLA]
+Role: Growth Product Manager (Website PM)
+Timeline: December 2023 - Present
+Focus: Leveraging AI for personalization, experimentation, and scale.
+Key Responsibilities:
+- [cite_start]I own the website's product roadmap, optimizing for both Product-Led (PLG) and Sales-Led (SLG) growth motions[cite: 19, 20].
+- [cite_start]I am moving beyond conventional A/B testing to identify non-linear growth opportunities[cite: 73].
+- [cite_start]I am actively exploring applications of AI to personalize the website experience at scale and develop LLM-based predictive lead scoring models[cite: 18, 76].
+- [cite_start]I translate user data and stakeholder goals into a high-converting experience for millions of visitors[cite: 20, 277].
+
+[PAST EXPERIENCE - EMENDU]
+Role: CPO & Co-Founder
+Timeline: Jan 2021 - June 2023
+Summary: Built a SaaS platform for Renting & Device Management from 0 to 1.
+Key Achievements:
+- [cite_start]Developed the platform from initial concept to full production release within one year[cite: 23].
+- [cite_start]Grew Monthly Recurring Revenue (MRR) by 14x (from €0 to €30k/month) in 1.5 years[cite: 24, 231].
+- [cite_start]Maintained 98% customer retention while managing customer success for 60+ clients[cite: 24, 232].
+- [cite_start]Led a cross-functional organization of over 12 people across Technology, Operations, Marketing, and Sales[cite: 25].
+
+[PAST EXPERIENCE - PASSPORTER]
+Role: Marketing Manager / Growth Manager
+Timeline: Feb 2020 - Dec 2020
+Key Achievements:
+- [cite_start]Uncovered the critical need to switch the company's strategy from User Acquisition to User Retention after analyzing that 7-day retention was less than 1%[cite: 238].
+- [cite_start]Managed a €100k budget, achieving a Cost Per Install (CPI) of €1 or less in Spain[cite: 236].
+- [cite_start]Implemented a robust In-App Tracking System using Mixpanel[cite: 237].
+
+[PAST EXPERIENCE - DESPEGAR.COM]
+Role: Digital Advertising Team Leader
+Timeline: Jan 2017 - Nov 2019
+Key Achievements:
+- [cite_start]Managed an annual budget of €9,000,000 for online media buying across LATAM and Brazil[cite: 164, 241].
+- [cite_start]Collaborated with data science teams to run validation experiments for in-house machine learning models predicting user behavior, testing them against third-party tools[cite: 28, 286].
+- [cite_start]Led the marketing efforts for the M&A of "Viajes Falabella," integrating teams in just 2 months[cite: 243].
+- [cite_start]Achieved ROIs > 2 (profit over ad spend) through rigorous A/B testing[cite: 242].
+
+[EDUCATION & CERTIFICATIONS]
+- [cite_start]AI Strategy: Reforge (May 2025 - July 2025)[cite: 33].
+- [cite_start]Technical Skills: Datacamp (Python, OpenAI API, Git) & Google Cloud Skills Boost (GenAI, Transformers)[cite: 34, 35].
+- [cite_start]Innovation Management: Postgraduate at Universidad de Buenos Aires (2019)[cite: 36].
+- Civil Engineering: Universidad de Buenos Aires (2008-2016). [cite_start]My engineering background gives me a strong foundation in problem-solving and analytical thinking[cite: 36, 128].
+
+[PORTFOLIO PROJECT CONTEXT]
+Project: "How I Built This Portfolio"
+Description: This website is a case study in itself. It is a full-stack AI application built with Next.js (Frontend), Python/FastAPI (Backend), and Vercel (Hosting).
+Why I built it: To demonstrate my hands-on technical ability with the modern AI stack. It uses a RAG (Retrieval-Augmented Generation) system to allow users to chat with my professional history.

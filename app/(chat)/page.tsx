@@ -1,41 +1,32 @@
-// This is your correct "named export" import
-import { Chat } from "@/components/chat";
 import Link from "next/link";
+import { Chat } from "@/components/chat"; // Importamos el nuevo componente limpio
 
-// This is your correct function name
 export default function Page() {
   return (
-    // This is the new <main> wrapper to hold everything
-    <main className="flex flex-col items-center p-12 md:p-12">
+    <main className="flex flex-col items-center p-12 md:p-24">
       
-      {/* === THIS IS YOUR NEW HEADER === */}
-      <div className="w-full max-w-5xl mb-16 text-left">
+      {/* HEADER */}
+      <div className="w-full max-w-5xl mb-12 text-left">
         <h1 className="text-4xl font-bold tracking-tight mb-2">
           Fran Chaves - Growth PM Portfolio
         </h1>
         <p className="text-xl text-gray-400">
-          Welcome to my (wip) site. Here are my case studies.
+          Welcome to my AI-powered portfolio. Ask anything about my experience.
         </p>
       </div>
-      {/* === END OF NEW HEADER === */}
 
-      {/* This is your original Chat component, now in its own <div> */}
-      <div className="w-full max-w-5xl flex flex-col">
+      {/* EL NUEVO CHAT */}
+      <div className="w-full max-w-3xl mb-24">
         <Chat />
       </div>
-      {/* === START: FEATURED CASE STUDIES SECTION === */}
-      
-      <div className="w-full max-w-5xl mt-24 text-left">
-        
-        {/* Section Title */}
+
+      {/* CASE STUDIES SECTION */}
+      <div className="w-full max-w-5xl text-left">
         <h2 className="text-3xl font-bold mb-8">
           Featured Case Studies
         </h2>
-
-        {/* Grid for the cards */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          
-          {/* Card 1: Your Portfolio (This is a great first case study!) */}
+          {/* Card 1 */}
           <Link 
             href="/case-studies/how-i-built-this-portfolio" 
             className="block p-6 bg-gray-800 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors"
@@ -44,25 +35,22 @@ export default function Page() {
               How I Built This Portfolio
             </h3>
             <p className="text-gray-400 mb-4">
-              A case study on building a full-stack AI app with Next.js, Python, and Vercel.
+              A case study on building a full-stack AI app with Next.js, Python, and LangChain.
             </p>
             <span className="font-semibold text-white">Read Case Study &rarr;</span>
           </Link>
 
-          {/* Card 2: Placeholder */}
-          <a href="#" className="block p-6 bg-gray-800 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors">
-            <h3 className="text-2xl font-bold mb-3">
-              Project Title 2
+          {/* Card 2 Placeholder */}
+          <div className="block p-6 bg-gray-800/50 rounded-lg border border-gray-800">
+            <h3 className="text-2xl font-bold mb-3 text-gray-500">
+              More Coming Soon...
             </h3>
-            <p className="text-gray-400 mb-4">
-              A summary of your second-best project. What was the problem and the outcome?
+            <p className="text-gray-600 mb-4">
+              Working on documenting my growth experiments at TestGorilla.
             </p>
-            <span className="font-semibold text-white">Read Case Study &rarr;</span>
-          </a>
-
+          </div>
         </div>
       </div>
-      {/* === END: FEATURED CASE STUDIES SECTION === */}
     </main>
   );
 }
