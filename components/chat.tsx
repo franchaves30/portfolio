@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Bot, User, Loader2, AlertCircle } from "lucide-react";
+import { Send, Bot, User, Loader2, AlertCircle, Sparkles } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 interface Message {
   id: string;
@@ -14,11 +15,14 @@ export function Chat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [isExpanded, setIsExpanded] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (messages.length > 0) {
+      setIsExpanded(true);
       messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
     }
   }, [messages]);
@@ -37,6 +41,7 @@ export function Chat() {
     setInput("");
     setIsLoading(true);
     setError(null);
+    setIsExpanded(true);
 
     try {
       const response = await fetch("/api/chat", {
@@ -87,11 +92,22 @@ export function Chat() {
   };
 
   return (
-    <div className="flex flex-col w-full max-w-4xl mx-auto bg-black/40 border border-white/10 rounded-2xl overflow-hidden shadow-2xl backdrop-blur-xl h-[calc(100dvh-200px)] md:h-[70vh] min-h-[400px] max-h-[800px] relative">
-
-      {/* HEADER */}
-      <div className="flex-none p-4 border-b border-white/10 bg-white/5 flex items-center gap-3 z-10">
-        <div className="p-2 bg-blue-500/20 rounded-lg">
+    <div
+      className={cn(
+        "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out relative",
+        isExpanded
+          ? "bg-black/40 border border-white/10 rounded-3xl shadow-2xl backdrop-blur-xl h-[calc(100dvh-150px)] md:h-[600px]"
+          : "bg-transparent h-[80px]"
+      )}
+    >
+      {/* EXPANDED HEADER */}
+      <div
+        className={cn(
+          "flex-none p-4 border-b border-white/10 bg-white/5 flex items-center gap-3 transition-opacity duration-300 rounded-t-3xl",
+          isExpanded ? "opacity-100" : "opacity-0 pointer-events-none hidden"
+        )}
+      >
+        <div className="p-2 bg-blue-500/20 rounded-xl">
           <Bot className="w-5 h-5 text-blue-400" />
         </div>
         <div>
@@ -101,7 +117,12 @@ export function Chat() {
       </div>
 
       {/* MESSAGES AREA */}
-      <div className="flex-1 overflow-y-auto p-6 space-y-6 scrollbar-thin scrollbar-thumb-white/10 scrollbar-track-transparent">
+      <div
+        className={cn(
+          "flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar transition-opacity duration-500",
+          isExpanded ? "opacity-100" : "opacity-0 hidden"
+        )}
+      >
         {messages.length === 0 && !error && (
           <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-0 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
             <div className="w-16 h-16 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
@@ -128,19 +149,13 @@ export function Chat() {
             )}
 
             <div
-              className={`max-w-[80%] rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-sm ${m.role === "user"
+              className={`max-w-[85%] rounded-2xl px-5 py-3 text-sm leading-relaxed shadow-sm ${m.role === "user"
                 ? "bg-blue-600 text-white rounded-br-sm"
                 : "bg-white/5 text-gray-100 border border-white/10 rounded-bl-sm"
                 }`}
             >
               <span className="whitespace-pre-wrap">{m.content}</span>
             </div>
-
-            {m.role === "user" && (
-              <div className="w-8 h-8 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0 mt-1">
-                <User className="w-4 h-4 text-purple-400" />
-              </div>
-            )}
           </div>
         ))}
 
@@ -170,28 +185,51 @@ export function Chat() {
       </div>
 
       {/* INPUT AREA */}
-      <div className="flex-none p-4 bg-black/60 border-t border-white/10 backdrop-blur-md z-20">
-        <form onSubmit={handleLocalSubmit} className="relative max-w-4xl mx-auto flex gap-2">
-          <input
-            className="flex-1 bg-white/5 border border-white/10 text-white rounded-xl pl-4 pr-4 py-4 focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 placeholder-gray-500 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            placeholder="Ask something about Fran..."
-            autoComplete="off"
-            disabled={isLoading}
-          />
-
-          <button
-            type="submit"
-            disabled={isLoading || !input.trim()}
-            className="aspect-square h-auto bg-blue-600 hover:bg-blue-500 text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50 disabled:hover:bg-blue-600 disabled:cursor-not-allowed"
+      <div
+        className={cn(
+          "flex-none p-2 transition-all duration-500 ease-in-out z-20",
+          isExpanded ? "bg-black/60 border-t border-white/10 backdrop-blur-md rounded-b-3xl" : "bg-transparent"
+        )}
+      >
+        <form
+          onSubmit={handleLocalSubmit}
+          className={cn(
+            "relative mx-auto flex gap-2 transition-all duration-500",
+            isExpanded ? "max-w-4xl" : "max-w-2xl"
+          )}
+        >
+          <div className={cn(
+            "flex-1 flex items-center gap-2 bg-white/5 border border-white/10 text-white rounded-full pl-4 pr-2 py-2 focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-500/50 transition-all shadow-lg",
+            !isExpanded && "hover:bg-white/10 cursor-text"
+          )}
+            onClick={() => {
+              setIsExpanded(true);
+              inputRef.current?.focus();
+            }}
           >
-            {isLoading ? (
-              <Loader2 className="w-5 h-5 animate-spin" />
-            ) : (
-              <Send className="w-5 h-5" />
-            )}
-          </button>
+            {!isExpanded && <Sparkles className="w-5 h-5 text-blue-400 ml-1" />}
+            <input
+              ref={inputRef}
+              className="flex-1 bg-transparent border-none focus:outline-none placeholder-gray-400 text-sm h-10"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onFocus={() => setIsExpanded(true)}
+              placeholder={isExpanded ? "Ask something about Fran..." : "Ask me anything about Fran's experience..."}
+              autoComplete="off"
+              disabled={isLoading}
+            />
+            <button
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all disabled:opacity-50 disabled:hover:bg-blue-600 disabled:cursor-not-allowed"
+            >
+              {isLoading ? (
+                <Loader2 className="w-5 h-5 animate-spin" />
+              ) : (
+                <Send className="w-5 h-5" />
+              )}
+            </button>
+          </div>
         </form>
       </div>
     </div>

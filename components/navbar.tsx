@@ -16,9 +16,9 @@ export function Navbar() {
         <Link href="/case-studies" className="text-gray-400 hover:text-white">
           Case Studies
         </Link>
-        <Link href="/about" className="text-gray-400 hover:text-white">
+        {/* <Link href="/about" className="text-gray-400 hover:text-white">
           About
-        </Link>
+        </Link> */}
 
         {/* === HIDDEN LINKS === */}
         {/* These are commented out. To "un-hide" them, just remove the {/* and *\/}
