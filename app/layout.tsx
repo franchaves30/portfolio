@@ -4,6 +4,7 @@ import { Toaster } from "sonner";
 import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/next";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata = {
   title: "Fran Chaves - Growth & PM Portfolio",
@@ -39,6 +40,7 @@ export default function RootLayout({
         <Navbar />
         {children}
         <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
