@@ -26,3 +26,6 @@ vercel==0.3.2
 vercel-sandbox==0.0.2
 vercel-sdk==0.0.8
 langchain-openai
+langchain-core
+langsmith
+
