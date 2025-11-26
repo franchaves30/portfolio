@@ -19,13 +19,25 @@ export function Chat() {
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
+  const messagesContainerRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (messages.length > 0) {
       setIsExpanded(true);
-      messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+      if (messagesContainerRef.current) {
+        messagesContainerRef.current.scrollTo({
+          top: messagesContainerRef.current.scrollHeight,
+          behavior: "smooth",
+        });
+      }
     }
   }, [messages]);
+
+  useEffect(() => {
+    if (!isLoading && messages.length > 0) {
+      inputRef.current?.focus();
+    }
+  }, [isLoading, messages.length]);
 
   const handleLocalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -118,6 +130,7 @@ export function Chat() {
 
       {/* MESSAGES AREA */}
       <div
+        ref={messagesContainerRef}
         className={cn(
           "flex-1 overflow-y-auto p-6 space-y-6 custom-scrollbar transition-opacity duration-500",
           isExpanded ? "opacity-100" : "opacity-0 hidden"
