@@ -1,8 +1,9 @@
 from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
-from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
+from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
 from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from pathlib import Path
@@ -53,6 +54,14 @@ async def chat(request: ChatRequest):
         print("--- DEBUG: Chat started ---")
         context_data = get_portfolio_data()
         
+        # Parse conversation history
+        history = []
+        for msg in request.messages[:-1]: # Exclude the last message which is the current question
+            if msg.get('role') == 'user':
+                history.append(HumanMessage(content=msg.get('content', '')))
+            elif msg.get('role') == 'assistant':
+                history.append(AIMessage(content=msg.get('content', '')))
+        
         last_message = request.messages[-1]
         user_question = ""
         if isinstance(last_message, dict):
@@ -71,17 +80,20 @@ async def chat(request: ChatRequest):
         3.  **Concise and Relevant:** Keep answers focused on the user's question. Avoid unnecessary fluff.
         4.  **Formatting:** Use Markdown for better readability (bullet points, bold text for emphasis) where appropriate.
         5.  **First Person Representation:** You are acting on behalf of Fran's portfolio, but refer to Fran in the third person (e.g., "Fran has experience in...") unless asked to roleplay, but generally stick to being a helpful assistant about him.
-        
-        User Question: {question}
         """
 
-        prompt = ChatPromptTemplate.from_template(system_template)
+        prompt = ChatPromptTemplate.from_messages([
+            ("system", system_template),
+            MessagesPlaceholder(variable_name="history"),
+            ("human", "{question}")
+        ])
         
         chain = prompt | llm | StrOutputParser()
 
         async def generate():
             async for chunk in chain.astream({
                 "context": context_data,
+                "history": history,
                 "question": user_question
             }):
                 yield chunk
