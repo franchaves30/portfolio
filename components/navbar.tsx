@@ -14,7 +14,7 @@ export function Navbar() {
       <div className="flex items-center space-x-6">
 
         <Link href="/case-studies" className="text-gray-400 hover:text-white">
-          Case Studies
+          Builds & Strategy
         </Link>
         {/* <Link href="/about" className="text-gray-400 hover:text-white">
           About
