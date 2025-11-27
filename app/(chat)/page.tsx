@@ -23,7 +23,7 @@ export default function Page() {
       {/* CASE STUDIES SECTION */}
       <div className="w-full max-w-5xl text-left">
         <h2 className="text-3xl font-bold mb-8">
-          Featured Case Studies
+          Featured Builds & Ideas
         </h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Card 1 */}
@@ -46,7 +46,7 @@ export default function Page() {
               More Coming Soon...
             </h3>
             <p className="text-gray-600 mb-4">
-              Working on documenting my growth experiments at TestGorilla.
+              Working on documenting my experience and putting my thoughts on paper.
             </p>
           </div>
         </div>
