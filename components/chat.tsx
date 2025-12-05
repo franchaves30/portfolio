@@ -103,12 +103,44 @@ export function Chat() {
     }
   };
 
+  // Handle mobile viewport height for keyboard
+  const [viewportStyle, setViewportStyle] = useState({ height: "100dvh", top: "0px" });
+
+  useEffect(() => {
+    // Only run on client and if visualViewport is supported
+    if (typeof window === "undefined" || !window.visualViewport) return;
+
+    const handleResize = () => {
+      // Use visualViewport height if available
+      if (window.visualViewport) {
+        setViewportStyle({
+          height: `${window.visualViewport.height}px`,
+          top: `${window.visualViewport.offsetTop}px`,
+        });
+      }
+    };
+
+    window.visualViewport.addEventListener("resize", handleResize);
+    window.visualViewport.addEventListener("scroll", handleResize);
+    handleResize(); // Initial set
+
+    return () => {
+      window.visualViewport?.removeEventListener("resize", handleResize);
+      window.visualViewport?.removeEventListener("scroll", handleResize);
+    };
+  }, []);
+
   return (
     <div
+      style={
+        isExpanded && typeof window !== "undefined" && window.innerWidth < 768
+          ? viewportStyle
+          : undefined
+      }
       className={cn(
         "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out md:rounded-3xl",
         isExpanded
-          ? "fixed inset-x-0 bottom-0 z-50 bg-[#0a0a0a] h-[100dvh] md:relative md:inset-auto md:h-[60vh] md:border md:border-white/10 md:shadow-2xl md:overflow-hidden"
+          ? "fixed inset-x-0 top-0 z-50 bg-[#0a0a0a] md:relative md:inset-auto md:h-[60vh] md:border md:border-white/10 md:shadow-2xl md:overflow-hidden"
           : "relative bg-transparent h-[80px]"
       )}
     >
