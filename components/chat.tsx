@@ -108,7 +108,7 @@ export function Chat() {
       className={cn(
         "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out md:rounded-3xl",
         isExpanded
-          ? "fixed inset-0 z-50 bg-[#0a0a0a] h-[100dvh] md:relative md:inset-auto md:h-[60vh] md:border md:border-white/10 md:shadow-2xl md:overflow-hidden"
+          ? "fixed inset-0 z-50 bg-[#0a0a0a] md:relative md:inset-auto md:h-[60vh] md:border md:border-white/10 md:shadow-2xl md:overflow-hidden"
           : "relative bg-transparent h-[80px]"
       )}
     >
