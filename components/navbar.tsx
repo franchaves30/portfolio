@@ -3,7 +3,7 @@ import { Github, Linkedin } from 'lucide-react'
 
 export function Navbar() {
   return (
-    <nav className="w-full max-w-5xl mx-auto px-4 py-4 flex justify-between items-center">
+    <nav className="w-full max-w-5xl mx-auto px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-4 flex justify-between items-center">
 
       {/* Left Side: Your Name/Logo */}
       <Link href="/" className="text-xl font-bold">
