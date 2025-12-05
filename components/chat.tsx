@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Bot, User, Loader2, AlertCircle, Sparkles, X } from "lucide-react";
+import { ArrowUp, Bot, User, Loader2, AlertCircle, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -106,12 +106,19 @@ export function Chat() {
   return (
     <div
       className={cn(
-        "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out",
+        "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out md:rounded-3xl",
         isExpanded
-          ? "fixed inset-0 z-50 bg-black/95 md:bg-black/40 md:relative md:inset-auto md:border md:border-white/10 md:rounded-3xl md:shadow-2xl md:backdrop-blur-xl md:h-[600px]"
+          ? "fixed inset-0 z-50 bg-[#0a0a0a] md:relative md:inset-auto md:h-[60vh] md:border md:border-white/10 md:shadow-2xl md:overflow-hidden"
           : "relative bg-transparent h-[80px]"
       )}
     >
+      {/* Subtle top glow - only visible when expanded */}
+      <div
+        className={cn(
+          "absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-blue-500 to-transparent opacity-50 transition-opacity duration-500",
+          isExpanded ? "opacity-50" : "opacity-0"
+        )}
+      />
       {/* EXPANDED HEADER */}
       <div
         className={cn(
@@ -245,7 +252,7 @@ export function Chat() {
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <Send className="w-5 h-5" />
+                <ArrowUp className="w-5 h-5" />
               )}
             </button>
           </div>
