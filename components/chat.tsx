@@ -123,8 +123,8 @@ export function Chat() {
           <Bot className="w-5 h-5 text-blue-400" />
         </div>
         <div>
-          <h3 className="font-semibold text-white">Portfolio Assistant</h3>
-          <p className="text-xs text-gray-400">Ask me anything about Fran&apos;s experience</p>
+          <h3 className="font-semibold text-white">Fran&apos;s AI assistant</h3>
+          <p className="text-xs text-gray-400">Ask me about Fran&apos;s experience</p>
         </div>
       </div>
 
@@ -227,7 +227,7 @@ export function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder={isExpanded ? "Ask something about Fran..." : "Ask me anything about Fran's experience..."}
+              placeholder={isExpanded ? "Ask something about Fran..." : "Ask me about Fran's experience..."}
               autoComplete="off"
               disabled={isLoading}
             />

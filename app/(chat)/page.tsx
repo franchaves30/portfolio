@@ -8,10 +8,10 @@ export default function Page() {
       {/* HEADER */}
       <div className="w-full max-w-5xl mb-12 text-left">
         <h1 className="text-4xl font-bold tracking-tight mb-2">
-          Fran Chaves - Growth PM Portfolio
+          Fran Chaves - Growth Product Manager
         </h1>
         <p className="text-xl text-gray-400">
-          Welcome to my AI-powered portfolio. Ask anything about my experience.
+          Welcome! Chat to my AI-powered CV 24-7.
         </p>
       </div>
 
