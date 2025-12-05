@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { Send, Bot, User, Loader2, AlertCircle, Sparkles } from "lucide-react";
+import { Send, Bot, User, Loader2, AlertCircle, Sparkles, X } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 interface Message {
@@ -106,26 +106,32 @@ export function Chat() {
   return (
     <div
       className={cn(
-        "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out relative",
+        "flex flex-col w-full max-w-3xl mx-auto transition-all duration-500 ease-in-out",
         isExpanded
-          ? "bg-black/40 border border-white/10 rounded-3xl shadow-2xl backdrop-blur-xl h-[calc(100dvh-150px)] md:h-[600px]"
-          : "bg-transparent h-[80px]"
+          ? "fixed inset-0 z-50 bg-black/95 md:bg-black/40 md:relative md:inset-auto md:border md:border-white/10 md:rounded-3xl md:shadow-2xl md:backdrop-blur-xl md:h-[600px]"
+          : "relative bg-transparent h-[80px]"
       )}
     >
       {/* EXPANDED HEADER */}
       <div
         className={cn(
-          "flex-none p-4 border-b border-white/10 bg-white/5 flex items-center gap-3 transition-opacity duration-300 rounded-t-3xl",
+          "flex-none p-4 border-b border-white/10 bg-white/5 flex items-center gap-3 transition-opacity duration-300 md:rounded-t-3xl",
           isExpanded ? "opacity-100" : "opacity-0 pointer-events-none hidden"
         )}
       >
         <div className="p-2 bg-blue-500/20 rounded-xl">
           <Bot className="w-5 h-5 text-blue-400" />
         </div>
-        <div>
+        <div className="flex-1">
           <h3 className="font-semibold text-white">Fran&apos;s AI assistant</h3>
           <p className="text-xs text-gray-400">Ask me about Fran&apos;s experience</p>
         </div>
+        <button
+          onClick={() => setIsExpanded(false)}
+          className="p-2 hover:bg-white/10 rounded-full transition-colors md:hidden"
+        >
+          <X className="w-5 h-5 text-gray-400" />
+        </button>
       </div>
 
       {/* MESSAGES AREA */}
@@ -201,7 +207,7 @@ export function Chat() {
       <div
         className={cn(
           "flex-none p-2 transition-all duration-500 ease-in-out z-20",
-          isExpanded ? "bg-black/60 border-t border-white/10 backdrop-blur-md rounded-b-3xl" : "bg-transparent"
+          isExpanded ? "bg-black/60 border-t border-white/10 backdrop-blur-md md:rounded-b-3xl" : "bg-transparent"
         )}
       >
         <form
