@@ -257,34 +257,41 @@ export function Chat() {
           )}
         >
           <div className={cn(
-            "flex-1 flex items-center gap-2 bg-white/5 border border-white/10 text-white rounded-full pl-4 pr-2 py-2 focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-500/50 transition-all shadow-lg",
-            !isExpanded && "hover:bg-white/10 cursor-text"
+            "flex-1 flex items-center gap-3 bg-white/5 border border-white/10 text-white rounded-2xl pl-4 pr-2 py-3 focus-within:ring-2 focus-within:ring-blue-500/50 focus-within:border-blue-500/50 transition-all shadow-lg",
+            !isExpanded && "bg-white/5 border-blue-500/30 shadow-[0_0_15px_-3px_rgba(59,130,246,0.2)] hover:border-blue-500/50 hover:shadow-[0_0_20px_-3px_rgba(59,130,246,0.3)] cursor-text p-4"
           )}
             onClick={() => {
               setIsExpanded(true);
               inputRef.current?.focus();
             }}
           >
-            {!isExpanded && <Sparkles className="w-5 h-5 text-blue-400 ml-1" />}
+            {!isExpanded && (
+              <div className="p-1.5 bg-blue-500/20 rounded-lg animate-pulse">
+                <Sparkles className="w-5 h-5 text-blue-400" />
+              </div>
+            )}
             <input
               ref={inputRef}
               className="flex-1 bg-transparent border-none focus:outline-none placeholder-gray-400 text-sm h-10"
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder={isExpanded ? "Ask something about Fran..." : "Ask me about Fran's experience..."}
+              placeholder={isExpanded ? "Ask something about Fran..." : "Ask about my Growth Strategy, AI Builds, or Leadership Experience..."}
               autoComplete="off"
               disabled={isLoading}
             />
             <button
               type="submit"
               disabled={isLoading || !input.trim()}
-              className="w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-full flex items-center justify-center transition-all disabled:opacity-50 disabled:hover:bg-blue-600 disabled:cursor-not-allowed"
+              className={cn(
+                "w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50 disabled:hover:bg-blue-600 disabled:cursor-not-allowed",
+                !isExpanded && "bg-transparent hover:bg-white/10 text-blue-400 shadow-none"
+              )}
             >
               {isLoading ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
-                <ArrowUp className="w-5 h-5" />
+                <ArrowUp className={cn("w-6 h-6 transition-transform", !isExpanded && "scale-110")} />
               )}
             </button>
           </div>
