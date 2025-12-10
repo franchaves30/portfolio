@@ -1,8 +1,9 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { ArrowUp, Bot, User, Loader2, AlertCircle, Sparkles, X } from "lucide-react";
+import { ArrowUp, Bot, User, Loader2, AlertCircle, Sparkles, X, Mic, Volume2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useVoice } from "@/hooks/use-voice";
 
 interface Message {
   id: string;
@@ -16,10 +17,36 @@ export function Chat() {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [isExpanded, setIsExpanded] = useState(false);
+  const [lastAssistantMessage, setLastAssistantMessage] = useState<string>("");
+  const [isVoiceInitiated, setIsVoiceInitiated] = useState(false);
 
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+  const speakTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Voice mode hook
+  const {
+    isRecording,
+    isProcessing,
+    isPlaying,
+    pendingAudio,
+    recordingDuration,
+    startRecording,
+    stopRecording,
+    speak,
+    stopAudio,
+    playPendingAudio,
+  } = useVoice((transcribedText) => {
+    // When transcription completes, populate input and auto-submit
+    setInput(transcribedText);
+    setIsVoiceInitiated(true); // Mark this as voice-initiated
+    setTimeout(() => {
+      // Trigger form submission
+      const event = new Event('submit', { bubbles: true, cancelable: true });
+      document.querySelector('form')?.dispatchEvent(event);
+    }, 100);
+  });
 
   useEffect(() => {
     if (messages.length > 0) {
@@ -42,6 +69,13 @@ export function Chat() {
   const handleLocalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim() || isLoading) return;
+
+    // Clear previous assistant message and cancel any pending speak timeouts
+    setLastAssistantMessage("");
+    if (speakTimeoutRef.current) {
+      clearTimeout(speakTimeoutRef.current);
+      speakTimeoutRef.current = null;
+    }
 
     const userMessage: Message = {
       id: Date.now().toString(),
@@ -95,6 +129,9 @@ export function Chat() {
           return newMessages;
         });
       }
+
+      // After streaming completes, save and speak the response
+      setLastAssistantMessage(assistantMessage.content);
     } catch (err) {
       console.error("Chat Error:", err);
       setError("Something went wrong. Please try again.");
@@ -102,6 +139,33 @@ export function Chat() {
       setIsLoading(false);
     }
   };
+
+  // Effect to speak assistant message after it's set (only for voice-initiated messages)
+  useEffect(() => {
+    // Clear any existing timeout
+    if (speakTimeoutRef.current) {
+      clearTimeout(speakTimeoutRef.current);
+      speakTimeoutRef.current = null;
+    }
+
+    if (lastAssistantMessage && !isLoading && isVoiceInitiated) {
+      speakTimeoutRef.current = setTimeout(() => {
+        speak(lastAssistantMessage);
+        setIsVoiceInitiated(false); // Reset flag after speaking
+        speakTimeoutRef.current = null;
+      }, 500);
+    } else if (lastAssistantMessage && !isLoading && !isVoiceInitiated) {
+      // Text message - don't speak, just reset
+      setIsVoiceInitiated(false);
+    }
+
+    return () => {
+      // Cleanup timeout on unmount
+      if (speakTimeoutRef.current) {
+        clearTimeout(speakTimeoutRef.current);
+      }
+    };
+  }, [lastAssistantMessage, isLoading, isVoiceInitiated, speak]);
 
   // Handle mobile viewport height for keyboard
   const [viewportStyle, setViewportStyle] = useState({ height: "100dvh", top: "0px" });
@@ -182,16 +246,32 @@ export function Chat() {
         )}
       >
         {messages.length === 0 && !error && (
-          <div className="flex flex-col items-center justify-center h-full text-center space-y-4 opacity-0 animate-in fade-in slide-in-from-bottom-4 duration-700 fill-mode-forwards">
+          <div className="flex flex-col items-center justify-center h-full text-center space-y-4 animate-fade-in">
             <div className="w-16 h-16 bg-gradient-to-tr from-blue-500 to-purple-500 rounded-2xl flex items-center justify-center shadow-lg shadow-blue-500/20">
               <Bot className="w-8 h-8 text-white" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">Hello! I&apos;m Fran&apos;s AI Assistant.</h2>
+              <h2 className="text-xl font-semibold text-white">Hey! Want to know more about Fran?</h2>
               <p className="text-gray-400 max-w-sm mx-auto">
-                I can tell you about his experience, skills, and projects. What would you like to know?
+                Ask me about his experience, projects, or skills. Type below or tap the mic to chat with your voice.
+              </p>
+              <p className="text-xs text-blue-400/70 pt-2">
+                💡 Voice questions get voice answers
               </p>
             </div>
+          </div>
+        )}
+
+        {/* Stop Audio Button - Shows when playing */}
+        {isPlaying && (
+          <div className="flex justify-center pb-4">
+            <button
+              onClick={stopAudio}
+              className="flex items-center gap-2 px-4 py-2 bg-red-600/20 hover:bg-red-600/30 border border-red-500/30 rounded-full text-red-400 text-sm transition-all"
+            >
+              <Volume2 className="w-4 h-4" />
+              <span>Stop Audio</span>
+            </button>
           </div>
         )}
 
@@ -245,10 +325,26 @@ export function Chat() {
       {/* INPUT AREA */}
       <div
         className={cn(
-          "flex-none p-2 transition-all duration-500 ease-in-out z-20",
+          "flex-none p-2 transition-all duration-500 ease-in-out z-20 relative",
           isExpanded ? "bg-black/60 border-t border-white/10 backdrop-blur-md md:rounded-b-3xl" : "bg-transparent"
         )}
       >
+        {/* Recording Feedback Overlay */}
+        {isRecording && (
+          <div className="absolute inset-x-0 top-[-60px] flex items-center justify-center">
+            <div className="bg-red-600/90 backdrop-blur-sm px-6 py-3 rounded-full flex items-center gap-3 shadow-lg shadow-red-500/20 animate-in fade-in slide-in-from-bottom-4">
+              <div className="flex items-center gap-2">
+                <div className="w-3 h-3 bg-white rounded-full animate-pulse" />
+                <span className="text-white font-medium">Listening...</span>
+              </div>
+              <div className="h-4 w-px bg-white/30" />
+              <span className="text-white/90 text-sm">{recordingDuration}s</span>
+              <div className="h-4 w-px bg-white/ 30" />
+              <span className="text-white/70 text-xs">Click mic to stop</span>
+            </div>
+          </div>
+        )}
+
         <form
           onSubmit={handleLocalSubmit}
           className={cn(
@@ -278,17 +374,52 @@ export function Chat() {
               onFocus={() => setIsExpanded(true)}
               placeholder={isExpanded ? "Ask something about Fran..." : "Ask about my Growth Strategy, AI Builds, or Leadership Experience..."}
               autoComplete="off"
-              disabled={isLoading}
+              disabled={isLoading || isProcessing}
             />
+
+            {/* Voice Mode Button */}
+            {isExpanded && (
+              <button
+                type="button"
+                onClick={() => {
+                  if (isRecording) {
+                    stopRecording();
+                  } else {
+                    startRecording();
+                  }
+                }}
+                disabled={isLoading || isProcessing}
+                className={cn(
+                  "w-10 h-10 rounded-xl flex items-center justify-center transition-all",
+                  isRecording
+                    ? "bg-red-600 hover:bg-red-500 text-white animate-pulse"
+                    : "bg-white/10 hover:bg-white/20 text-gray-400 disabled:opacity-50"
+                )}
+              >
+                <Mic className="w-5 h-5" />
+              </button>
+            )}
+
+            {/* Pending Audio Play Button */}
+            {pendingAudio && (
+              <button
+                type="button"
+                onClick={playPendingAudio}
+                className="w-10 h-10 bg-green-600 hover:bg-green-500 text-white rounded-xl flex items-center justify-center transition-all animate-pulse"
+              >
+                <Volume2 className="w-5 h-5" />
+              </button>
+            )}
+
             <button
               type="submit"
-              disabled={isLoading || !input.trim()}
+              disabled={isLoading || !input.trim() || isProcessing}
               className={cn(
                 "w-10 h-10 bg-blue-600 hover:bg-blue-500 text-white rounded-xl flex items-center justify-center transition-all disabled:opacity-50 disabled:hover:bg-blue-600 disabled:cursor-not-allowed",
                 !isExpanded && "bg-transparent hover:bg-white/10 text-blue-400 shadow-none"
               )}
             >
-              {isLoading ? (
+              {isLoading || isProcessing ? (
                 <Loader2 className="w-5 h-5 animate-spin" />
               ) : (
                 <ArrowUp className={cn("w-6 h-6 transition-transform", !isExpanded && "scale-110")} />

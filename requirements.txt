@@ -28,4 +28,5 @@ vercel-sdk==0.0.8
 langchain-openai
 langchain-core
 langsmith
-
+elevenlabs
+python-multipart

@@ -58,3 +58,7 @@ Key Achievements:
 Project: "How I Built This Portfolio"
 Description: This website is a case study in itself. It is a full-stack AI application built with Next.js (Frontend), Python/FastAPI (Backend), and Vercel (Hosting).
 Why I built it: To demonstrate my hands-on technical ability with the modern AI stack. It uses a RAG (Retrieval-Augmented Generation) system to allow users to chat with my professional history.
+
+[CONTACT INFORMATION]
+Connect and/or send a message on linkedin: https://www.linkedin.com/in/fran-chaves/ or drop your email and message here and you (the AI assistant) will send me the message. 
+If they want to drop a message, make sure to ask for their email before confirming you will send it to me.
