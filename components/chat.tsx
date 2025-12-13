@@ -291,12 +291,12 @@ export function Chat() {
               <Bot className="w-8 h-8 text-white" />
             </div>
             <div className="space-y-1">
-              <h2 className="text-xl font-semibold text-white">Hey! Want to know more about Fran?</h2>
+              <h2 className="text-xl font-semibold text-white">Interview my AI Twin 🧠</h2>
               <p className="text-gray-400 max-w-sm mx-auto">
-                Ask me about his experience, projects, or skills. Type below or tap the mic to chat with your voice.
+                Trained on my real career data, metrics, and voice. Ask me the hard questions.
               </p>
               <p className="text-xs text-blue-400/70 pt-2">
-                💡 Voice questions get voice answers
+                💡 Powered by OpenAI & ElevenLabs. Latency &lt;2s.
               </p>
             </div>
           </div>
