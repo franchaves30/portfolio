@@ -12,6 +12,45 @@ interface Message {
   content: string;
 }
 
+// Custom hook for typewriter effect
+function useTypewriter(phrases: string[]) {
+  const [text, setText] = useState("");
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [loopNum, setLoopNum] = useState(0);
+  const [typingSpeed, setTypingSpeed] = useState(100);
+
+  useEffect(() => {
+    const i = loopNum % phrases.length;
+    const fullText = phrases[i];
+
+    const handleTyping = () => {
+      setText(current => {
+        if (isDeleting) {
+          return fullText.substring(0, current.length - 1);
+        } else {
+          return fullText.substring(0, current.length + 1);
+        }
+      });
+
+      if (!isDeleting && text === fullText) {
+        setTypingSpeed(1500); // Pause before deleting
+        setIsDeleting(true);
+      } else if (isDeleting && text === "") {
+        setIsDeleting(false);
+        setLoopNum(l => l + 1);
+        setTypingSpeed(100);
+      } else {
+        setTypingSpeed(isDeleting ? 50 : 100);
+      }
+    };
+
+    const timer = setTimeout(handleTyping, typingSpeed);
+    return () => clearTimeout(timer);
+  }, [text, isDeleting, loopNum, phrases, typingSpeed]);
+
+  return text;
+}
+
 export function Chat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -22,6 +61,14 @@ export function Chat() {
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const messagesContainerRef = useRef<HTMLDivElement>(null);
+
+  // Typewriter placeholder logic
+  const placeholderText = useTypewriter([
+    "Ask me about my AI stack...",
+    "Ask me about my biggest failure...",
+    "Ask me about TestGorilla...",
+    "Ask about Emendu's operations..."
+  ]);
 
   // ElevenLabs Conversation Hook
   const conversation = useConversation({
@@ -78,6 +125,25 @@ export function Chat() {
       inputRef.current?.focus();
     }
   }, [isLoading, messages.length]);
+
+  const handleQuickVoiceStart = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    setIsExpanded(true);
+
+    if (status !== "connected") {
+      try {
+        await navigator.mediaDevices.getUserMedia({ audio: true });
+        await conversation.startSession({
+          agentId: "agent_4101kcadwj5tfbe97sj1shgspea2",
+          connectionType: "websocket",
+        });
+      } catch (err) {
+        console.error("Failed to start session:", err);
+        setError("Microphone access denied or connection failed.");
+      }
+    }
+  };
 
   const handleLocalSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -317,7 +383,7 @@ export function Chat() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               onFocus={() => setIsExpanded(true)}
-              placeholder={isExpanded ? "Ask something about Fran..." : "Ask about my Growth Strategy, AI Builds, or Leadership Experience..."}
+              placeholder={isExpanded ? "Ask something about Fran..." : placeholderText}
               autoComplete="off"
               disabled={isLoading || status === "connected"}
             />
@@ -345,6 +411,20 @@ export function Chat() {
                 ) : (
                   <Mic className="w-5 h-5" />
                 )}
+              </button>
+            )}
+
+            {/* Quick Voice Start Button */}
+            {!isExpanded && (
+              <button
+                type="button"
+                onClick={handleQuickVoiceStart}
+                disabled={status === "connecting"}
+                className="w-10 h-10 bg-white/10 hover:bg-white/20 text-blue-400 rounded-xl flex items-center justify-center transition-all mr-1"
+                aria-label="Start Voice Chat"
+                title="Start Voice Chat"
+              >
+                <Mic className="w-5 h-5" />
               </button>
             )}
 
