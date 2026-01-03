@@ -1,17 +1,14 @@
-from fastapi import FastAPI, HTTPException, UploadFile, File
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 from langchain_core.output_parsers import StrOutputParser
-from langchain_core.messages import HumanMessage, AIMessage, SystemMessage
+from langchain_core.messages import HumanMessage, AIMessage
 from fastapi.responses import StreamingResponse
 from dotenv import load_dotenv
 from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 import os
-from openai import OpenAI
-from elevenlabs import ElevenLabs
-import io
 
 # --- SETUP ---
 script_dir = Path(__file__).parent
@@ -22,10 +19,6 @@ api_key = os.getenv("OPENAI_API_KEY")
 
 if not api_key:
     print("WARNING: OPENAI_API_KEY not found in environment variables.")
-
-# Initialize clients for voice mode
-openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
-elevenlabs_client = ElevenLabs(api_key=os.getenv("ELEVENLABS_API_KEY"))
 
 app = FastAPI()
 
@@ -111,57 +104,4 @@ async def chat(request: ChatRequest):
         print(f"ERROR: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
-@app.post("/api/transcribe")
-async def transcribe(file: UploadFile = File(...)):
-    """Transcribe audio file to text using OpenAI Whisper"""
-    try:
-        print("--- DEBUG: Transcription started ---")
-        
-        # Read the uploaded file
-        audio_data = await file.read()
-        
-        # Create a file-like object for OpenAI API
-        audio_file = io.BytesIO(audio_data)
-        audio_file.name = "audio.webm"  # OpenAI needs a filename
-        
-        # Transcribe using Whisper
-        transcription = openai_client.audio.transcriptions.create(
-            model="whisper-1",
-            file=audio_file
-        )
-        
-        print(f"Transcription: {transcription.text}")
-        return {"text": transcription.text}
-    
-    except Exception as e:
-        print(f"ERROR in transcription: {e}")
-        raise HTTPException(status_code=500, detail=str(e))
 
-class SpeakRequest(BaseModel):
-    text: str
-
-@app.post("/api/speak")
-async def speak(request: SpeakRequest):
-    """Convert text to speech using ElevenLabs"""
-    try:
-        print(f"--- DEBUG: TTS started for text: {request.text[:50]}... ---")
-        
-        # Generate audio using ElevenLabs
-        audio_stream = elevenlabs_client.text_to_speech.convert(
-            voice_id="nPczCjzI2devNBz1zQrb",  # Brian voice
-            text=request.text,
-            model_id="eleven_flash_v2_5"
-        )
-        
-        # Collect the audio stream into bytes
-        audio_bytes = b"".join(audio_stream)
-        
-        print("TTS generation complete")
-        return StreamingResponse(
-            io.BytesIO(audio_bytes),
-            media_type="audio/mpeg"
-        )
-    
-    except Exception as e:
-        print(f"ERROR in TTS: {e}")
-        raise HTTPException(status_code=500, detail=str(e))

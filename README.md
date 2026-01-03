@@ -1,41 +1,42 @@
-# AI SDK Python Streaming Preview
+# Fran Chaves — Growth & PM Portfolio
 
-This template demonstrates the usage of [Data Stream Protocol](https://sdk.vercel.ai/docs/ai-sdk-ui/stream-protocol#data-stream-protocol) to stream chat completions from a Python endpoint ([FastAPI](https://fastapi.tiangolo.com)) and display them using the [useChat](https://sdk.vercel.ai/docs/ai-sdk-ui/chatbot#chatbot) hook in your Next.js application.
+> "I bridge the gap between Business Strategy and Engineering. I don't just ask for features; I build them."
 
-## Deploy your own
+This is a full-stack AI application built to serve as my professional portfolio and digital twin. It demonstrates my ability to combine product-led growth strategy with hands-on technical implementation.
 
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https://github.com/vercel-labs/ai-sdk-preview-python-streaming)
+## 🤖 The AI Digital Twin
+The core of this portfolio is an interactive AI assistant trained on my real career data, metrics, and philosophy. 
+- **Text Chat**: A RAG-powered interface using **Next.js**, **FastAPI**, and **LangChain**.
+- **Voice Mode**: A low-latency conversational agent powered by **ElevenLabs**.
 
-## How to use
+## 🛠 Tech Stack
+- **Frontend**: Next.js 16 (React 19 + Turbopack), Tailwind CSS, Framer Motion.
+- **Backend**: FastAPI (Python), LangChain.
+- **AI/LLMs**: OpenAI (GPT-4o-mini), ElevenLabs (Voice AI).
+- **Deployment**: Vercel.
+- **Monitoring**: Vercel Analytics & Speed Insights.
 
-Run [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app) with [npm](https://docs.npmjs.com/cli/init), [Yarn](https://yarnpkg.com/lang/en/docs/cli/create/), or [pnpm](https://pnpm.io) to bootstrap the example:
+## 🚀 Case Studies & Builds
+- **How I built this Portfolio**: A deep dive into the architecture of this site.
+- **Product-Led Growth**: Examples of building sidecar products that drive organic B2B leads.
+- **Operational Leverage**: How I built a "Warehouse OS" to scale operations.
 
-```bash
-npx create-next-app --example https://github.com/vercel-labs/ai-sdk-preview-python-streaming ai-sdk-preview-python-streaming-example
-```
+---
 
-```bash
-yarn create next-app --example https://github.com/vercel-labs/ai-sdk-preview-python-streaming ai-sdk-preview-python-streaming-example
-```
+## 💻 Local Development
 
-```bash
-pnpm create next-app --example https://github.com/vercel-labs/ai-sdk-preview-python-streaming ai-sdk-preview-python-streaming-example
-```
-
-To run the example locally you need to:
-
-1. Sign up for accounts with the AI providers you want to use (e.g., OpenAI, Anthropic).
-2. Obtain API keys for each provider.
-3. Set the required environment variables as shown in the `.env.example` file, but in a new file called `.env`.
-4. `pnpm install` to install the required Node dependencies.
-5. `virtualenv venv` to create a virtual environment.
-6. `source venv/bin/activate` to activate the virtual environment.
-7. `pip install -r requirements.txt` to install the required Python dependencies.
-8. `pnpm dev` to launch the development server.
+1. **Clone the repo**
+2. **Backend Setup**:
+   - `cd api`
+   - `python3 -m venv venv && source venv/bin/activate`
+   - `pip install -r requirements.txt`
+3. **Frontend Setup**:
+   - `pnpm install`
+4. **Environment Variables**:
+   - Set `OPENAI_API_KEY` and `ELEVENLABS_API_KEY` in `.env.local`.
+5. **Run**:
+   - `pnpm dev`
 
 ## Learn More
-
-To learn more about the AI SDK or Next.js by Vercel, take a look at the following resources:
-
-- [AI SDK Documentation](https://sdk.vercel.ai/docs)
-- [Next.js Documentation](https://nextjs.org/docs)
+- Connect on [LinkedIn](https://www.linkedin.com/in/fran-chaves/)
+- Check out the [Case Studies](https://franchaves.com/case-studies)

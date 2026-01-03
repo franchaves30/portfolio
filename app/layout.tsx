@@ -14,7 +14,7 @@ export const metadata = {
   openGraph: {
     images: [
       {
-        url: "/og?title=AI SDK Python Streaming Preview",
+        url: "/og?title=Fran Chaves — Growth & PM Portfolio",
       },
     ],
   },
@@ -22,7 +22,7 @@ export const metadata = {
     card: "summary_large_image",
     images: [
       {
-        url: "/og?title=AI SDK Python Streaming Preview",
+        url: "/og?title=Fran Chaves — Growth & PM Portfolio",
       },
     ],
   },
