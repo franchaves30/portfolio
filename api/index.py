@@ -104,4 +104,15 @@ async def chat(request: ChatRequest):
         print(f"ERROR: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
+@app.post("/api/track")
+async def track(data: dict):
+    """Log analytics events to Vercel console"""
+    try:
+        import json
+        print(f"ANALYTICS_EVENT: {json.dumps(data)}")
+        return {"status": "ok"}
+    except Exception as e:
+        print(f"ERROR in tracking: {e}")
+        return {"status": "error", "message": str(e)}
+
 

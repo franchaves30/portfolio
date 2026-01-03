@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 import { Navbar } from "@/components/navbar";
 import { Analytics } from "@vercel/analytics/next";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { UtmLogger } from "@/components/utm-logger";
 
 
 export const metadata = {
@@ -41,6 +42,7 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body className={cn(GeistSans.className, "antialiased dark")}>
+        <UtmLogger />
         <Toaster position="top-center" richColors />
         <Navbar />
         {children}
