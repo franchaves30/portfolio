@@ -11,7 +11,7 @@ export function Breadcrumbs({ currentPage }: BreadcrumbsProps) {
   return (
     <nav className="text-sm text-gray-400 mb-4">
       <Link
-        href="/case-studies"
+        href="/builds-and-strategy"
         className="hover:text-white transition-colors"
       >
         Builds & Strategy

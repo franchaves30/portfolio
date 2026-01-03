@@ -1,5 +1,7 @@
 import Link from "next/link";
-import { Chat } from "@/components/chat"; // Importamos el nuevo componente limpio
+import { Chat } from "@/components/chat";
+import { buildsAndStrategy } from "@/lib/data";
+import { Badge } from "@/components/ui/badge";
 
 export default function Page() {
   return (
@@ -25,30 +27,31 @@ export default function Page() {
         <h2 className="text-3xl font-bold mb-8">
           Featured Builds & Ideas
         </h2>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-          {/* Card 1 */}
-          <Link
-            href="/case-studies/how-i-built-this-portfolio"
-            className="block p-6 bg-gray-800 rounded-lg border border-gray-700 hover:bg-gray-700 transition-colors"
-          >
-            <h3 className="text-2xl font-bold mb-3">
-              How I Built This Portfolio
-            </h3>
-            <p className="text-gray-400 mb-4">
-              A case study on building a full-stack AI app with Next.js, Python, and LangChain.
-            </p>
-            <span className="font-semibold text-white">Read Case Study &rarr;</span>
-          </Link>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {buildsAndStrategy.map((post) => (
+            <Link
+              key={post.id}
+              href={`/builds-and-strategy/${post.slug}`}
+              className="group p-5 bg-gray-900/50 rounded-xl border border-white/5 hover:border-blue-500/50 hover:bg-gray-800/80 transition-all flex flex-col h-full"
+            >
+              <div className="mb-3">
+                <Badge variant={post.tag === "What I Built" ? "built" : "strategy"} className="text-[10px] px-2 py-0">
+                  {post.tag}
+                </Badge>
+              </div>
+              <h3 className="text-lg font-bold mb-2 group-hover:text-blue-400 transition-colors line-clamp-2">
+                {post.title}
+              </h3>
+              <p className="text-sm text-gray-400 mb-4 line-clamp-3">
+                {post.description}
+              </p>
+              <div className="mt-auto pt-2 flex items-center text-xs font-semibold text-blue-400 opacity-0 group-hover:opacity-100 transition-opacity">
+                Read More &rarr;
+              </div>
+            </Link>
+          ))}
 
-          {/* Card 2 Placeholder */}
-          <div className="block p-6 bg-gray-800/50 rounded-lg border border-gray-800">
-            <h3 className="text-2xl font-bold mb-3 text-gray-500">
-              More Coming Soon...
-            </h3>
-            <p className="text-gray-600 mb-4">
-              Working on documenting my experience and putting my thoughts on paper.
-            </p>
-          </div>
+
         </div>
       </div>
     </main>

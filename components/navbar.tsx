@@ -13,7 +13,7 @@ export function Navbar() {
       {/* Right Side: Navigation Links */}
       <div className="flex items-center space-x-6">
 
-        <Link href="/case-studies" className="text-gray-400 hover:text-white">
+        <Link href="/builds-and-strategy" className="text-gray-400 hover:text-white">
           Builds & Strategy
         </Link>
         {/* <Link href="/about" className="text-gray-400 hover:text-white">
