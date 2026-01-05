@@ -9,6 +9,8 @@ from dotenv import load_dotenv
 from pathlib import Path
 from fastapi.middleware.cors import CORSMiddleware
 import os
+import requests
+import json
 
 # --- SETUP ---
 script_dir = Path(__file__).parent
@@ -106,10 +108,53 @@ async def chat(request: ChatRequest):
 
 @app.post("/api/track")
 async def track(data: dict):
-    """Log analytics events to Vercel console"""
+    """Log analytics events to Vercel console and persist to Google Sheets via Google Forms"""
     try:
-        import json
+        # 1. Existing debug print
         print(f"ANALYTICS_EVENT: {json.dumps(data)}")
+
+        # 2. Extract fields (Robustly)
+        # Event: 'event' or default to 'page_view'
+        event_name = data.get("event", "page_view")
+        
+        # Referrer: 'referrer'
+        referrer = data.get("referrer", "")
+        
+        # Screen: 'screen' or 'resolution'
+        screen = data.get("screen") or data.get("resolution", "")
+        
+        # UTMs: can be nested in 'utms' or flat in the data itself
+        utms = data.get("utms")
+        if not isinstance(utms, dict):
+            # If not nested, look at the top level
+            utm_source = data.get("utm_source", "")
+            utm_medium = data.get("utm_medium", "")
+        else:
+            # If nested, extract from dictionary
+            utm_source = utms.get("utm_source", "")
+            utm_medium = utms.get("utm_medium", "")
+
+        # 3. Construct payload for Google Form
+        # Field IDs from target documentation
+        form_data = {
+            "entry.1735252693": event_name,
+            "entry.1408622509": referrer,
+            "entry.1907457726": utm_source,
+            "entry.296274226": utm_medium,
+            "entry.1004098287": screen
+        }
+
+        # 4. Target URL
+        form_url = "https://docs.google.com/forms/d/e/1FAIpQLSfWNF-ginw7-prB-bNCzZvYOLZWsrCMgaY-iRZo94we2g2R6w/formResponse"
+
+        # 5. Send POST request (wrapped in try/except)
+        try:
+            response = requests.post(form_url, data=form_data, timeout=5)
+            if response.status_code != 200:
+                print(f"WARNING: Google Form returned status {response.status_code}")
+        except Exception as google_err:
+            print(f"WARNING: Failed to send data to Google Forms: {google_err}")
+
         return {"status": "ok"}
     except Exception as e:
         print(f"ERROR in tracking: {e}")
