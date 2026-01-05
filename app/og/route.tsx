@@ -22,28 +22,46 @@ export async function GET(request: Request) {
   return new ImageResponse(
     (
       <div
-        tw="flex h-full w-full bg-black"
-        style={{ fontFamily: "Geist Sans" }}
+        tw="flex h-full w-full bg-black relative items-center justify-center"
+        style={{ fontFamily: 'geist' }}
       >
-        {/* @ts-expect-error */}
-        <img src={imageData} alt="vercel opengraph background" />
-        <div tw="flex flex-col absolute h-full w-[750px] justify-center left-[50px] pr-[50px] pt-[116px] pb-[166px]">
-          <div
-            tw="text-zinc-50 tracking-tight flex-grow-1 flex flex-col justify-center leading-[1.1]"
-            style={{
-              textWrap: "balance",
-              fontWeight: 500,
-              fontSize: 80,
-              color: "black",
-              letterSpacing: "-0.05em",
-            }}
-          >
-            {title}
+        {/* Background Image */}
+        <img
+          src={imageData as any}
+          alt="background"
+          tw="absolute inset-0 w-full h-full object-cover"
+        />
+
+        {/* Optional Title/Description Overlay - Only show if provided */}
+        {(title || description) && (
+          <div tw="flex flex-col relative z-10 w-[80%] items-start justify-center">
+            {title && (
+              <div
+                tw="text-zinc-50 tracking-tight leading-[1.1] mb-4"
+                style={{
+                  textWrap: "balance",
+                  fontWeight: 600,
+                  fontSize: 80,
+                  letterSpacing: "-0.05em",
+                  textShadow: "0 4px 12px rgba(0,0,0,0.5)"
+                }}
+              >
+                {title}
+              </div>
+            )}
+            {description && (
+              <div
+                tw="text-[32px] font-medium text-zinc-300"
+                style={{
+                  textWrap: "balance",
+                  textShadow: "0 2px 8px rgba(0,0,0,0.5)"
+                }}
+              >
+                {description}
+              </div>
+            )}
           </div>
-          <div tw="text-[40px]" style={{ color: "#7D7D7D" }}>
-            {description}
-          </div>
-        </div>
+        )}
       </div>
     ),
     {
