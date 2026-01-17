@@ -1,19 +1,36 @@
+'use client'
+
 import Link from 'next/link'
 import { Github, Linkedin } from 'lucide-react'
+import { usePostHog } from 'posthog-js/react'
 
 export function Navbar() {
+  const posthog = usePostHog()
+
+  const trackClick = (eventName: string, properties: Record<string, any> = {}) => {
+    posthog.capture(eventName, properties)
+  }
+
   return (
     <nav className="w-full max-w-5xl mx-auto px-4 pt-[calc(1rem+env(safe-area-inset-top))] pb-4 flex justify-between items-center">
 
       {/* Left Side: Your Name/Logo */}
-      <Link href="/" className="text-xl font-bold">
+      <Link
+        href="/"
+        className="text-xl font-bold"
+        onClick={() => trackClick('nav_logo_clicked')}
+      >
         Fran Chaves
       </Link>
 
       {/* Right Side: Navigation Links */}
       <div className="flex items-center space-x-6">
 
-        <Link href="/builds-and-strategy" className="text-gray-400 hover:text-white">
+        <Link
+          href="/builds-and-strategy"
+          className="text-gray-400 hover:text-white"
+          onClick={() => trackClick('nav_link_clicked', { destination: 'builds-and-strategy' })}
+        >
           Builds & Strategy
         </Link>
         {/* <Link href="/about" className="text-gray-400 hover:text-white">
@@ -36,10 +53,20 @@ export function Navbar() {
 
 
         {/* Social Icons */}
-        <Link href="https://github.com/franchaves30" target="_blank" className="text-gray-400 hover:text-white transition-colors">
+        <Link
+          href="https://github.com/franchaves30"
+          target="_blank"
+          className="text-gray-400 hover:text-white transition-colors"
+          onClick={() => trackClick('social_link_clicked', { platform: 'github' })}
+        >
           <Github className="w-5 h-5" />
         </Link>
-        <Link href="https://www.linkedin.com/in/francisco-chaves" target="_blank" className="text-gray-400 hover:text-white transition-colors">
+        <Link
+          href="https://www.linkedin.com/in/francisco-chaves"
+          target="_blank"
+          className="text-gray-400 hover:text-white transition-colors"
+          onClick={() => trackClick('social_link_clicked', { platform: 'linkedin' })}
+        >
           <Linkedin className="w-5 h-5" />
         </Link>
 
@@ -48,6 +75,7 @@ export function Navbar() {
           href="https://www.linkedin.com/in/francisco-chaves"
           target="_blank"
           className="px-4 py-2 bg-white text-black font-semibold rounded-lg hover:bg-gray-200 transition-colors"
+          onClick={() => trackClick('cta_contact_clicked')}
         >
           Contact
         </Link>

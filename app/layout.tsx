@@ -33,6 +33,9 @@ export const metadata = {
   },
 };
 
+import { PostHogProvider } from "./posthog-provider";
+import PostHogPageView from "./posthog-pageview";
+
 export default function RootLayout({
   children,
 }: {
@@ -42,12 +45,15 @@ export default function RootLayout({
     <html lang="en" suppressHydrationWarning>
       <head></head>
       <body className={cn(GeistSans.className, "antialiased dark")}>
-        <UtmLogger />
-        <Toaster position="top-center" richColors />
-        <Navbar />
-        {children}
-        <Analytics />
-        <SpeedInsights />
+        <PostHogProvider>
+          <PostHogPageView />
+          <UtmLogger />
+          <Toaster position="top-center" richColors />
+          <Navbar />
+          {children}
+          <Analytics />
+          <SpeedInsights />
+        </PostHogProvider>
       </body>
     </html>
   );
