@@ -23,8 +23,8 @@ load_dotenv(dotenv_path=env_path)
 api_key = os.getenv("OPENAI_API_KEY")
 
 # PostHog Initialization
-posthog.api_key = os.getenv("POSTHOG_API_KEY")
-posthog.host = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
+posthog.api_key = os.getenv("POSTHOG_API_KEY") or os.getenv("NEXT_PUBLIC_POSTHOG_KEY")
+posthog.host = os.getenv("POSTHOG_HOST") or os.getenv("NEXT_PUBLIC_POSTHOG_HOST") or "https://us.i.posthog.com"
 
 if not api_key:
     print("WARNING: OPENAI_API_KEY not found in environment variables.")
@@ -66,8 +66,8 @@ def send_posthog_event(event_name: str, properties: dict):
     """
     # Ensure keys are set (sometimes needed in serverless global context)
     if not posthog.api_key:
-        posthog.api_key = os.getenv("POSTHOG_API_KEY")
-        posthog.host = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
+        posthog.api_key = os.getenv("POSTHOG_API_KEY") or os.getenv("NEXT_PUBLIC_POSTHOG_KEY")
+        posthog.host = os.getenv("POSTHOG_HOST") or os.getenv("NEXT_PUBLIC_POSTHOG_HOST") or "https://us.i.posthog.com"
 
     if not posthog.api_key:
         print("WARNING: PostHog API key not set. Skipping event capture.")
