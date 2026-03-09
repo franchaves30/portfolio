@@ -64,13 +64,24 @@ def send_posthog_event(event_name: str, properties: dict):
     Background task to send PostHog event and flush the queue.
     Crucial for Vercel Serverless to ensure event is sent before container freeze.
     """
+    # Ensure keys are set (sometimes needed in serverless global context)
+    if not posthog.api_key:
+        posthog.api_key = os.getenv("POSTHOG_API_KEY")
+        posthog.host = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
+
+    if not posthog.api_key:
+        print("WARNING: PostHog API key not set. Skipping event capture.")
+        return
+
     try:
+        print(f"DEBUG: Sending {event_name} to PostHog for session {properties.get('session_id', 'unknown')}...")
         posthog.capture(
             distinct_id=properties.get("distinct_id", "backend_user"), 
             event=event_name, 
             properties=properties
         )
         posthog.flush()
+        print(f"DEBUG: PostHog event {event_name} flushed successfully.")
     except Exception as e:
         print(f"PostHog Error: {e}")
 
