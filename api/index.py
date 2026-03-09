@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, BackgroundTasks
 from pydantic import BaseModel
 from langchain_openai import ChatOpenAI
 from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
@@ -11,6 +11,9 @@ from fastapi.middleware.cors import CORSMiddleware
 import os
 import requests
 import json
+import time
+import traceback
+import posthog
 
 # --- SETUP ---
 script_dir = Path(__file__).parent
@@ -18,6 +21,10 @@ root_dir = script_dir.parent
 env_path = root_dir / '.env.local'
 load_dotenv(dotenv_path=env_path)
 api_key = os.getenv("OPENAI_API_KEY")
+
+# PostHog Initialization
+posthog.api_key = os.getenv("POSTHOG_API_KEY")
+posthog.host = os.getenv("POSTHOG_HOST", "https://us.i.posthog.com")
 
 if not api_key:
     print("WARNING: OPENAI_API_KEY not found in environment variables.")
@@ -36,11 +43,13 @@ llm = ChatOpenAI(
     api_key=os.getenv("OPENAI_API_KEY"),
     model="gpt-4o-mini",
     streaming=True,
-    temperature=0.7
+    temperature=0.7,
+    model_kwargs={"stream_options": {"include_usage": True}}
 )
 
 class ChatRequest(BaseModel):
     messages: list
+    session_id: str = "unknown"
 
 def get_portfolio_data():
     try:
@@ -50,8 +59,23 @@ def get_portfolio_data():
     except Exception:
         return "Error loading data."
 
+def send_posthog_event(event_name: str, properties: dict):
+    """
+    Background task to send PostHog event and flush the queue.
+    Crucial for Vercel Serverless to ensure event is sent before container freeze.
+    """
+    try:
+        posthog.capture(properties.get("distinct_id", "backend_user"), event_name, properties)
+        posthog.flush()
+    except Exception as e:
+        print(f"PostHog Error: {e}")
+
 @app.post("/api/chat")
-async def chat(request: ChatRequest):
+async def chat(request: ChatRequest, background_tasks: BackgroundTasks):
+    start_time = time.time()
+    session_id = request.session_id
+    model_version = llm.model_name
+
     try:
         print("--- DEBUG: Chat started ---")
         context_data = get_portfolio_data()
@@ -90,19 +114,79 @@ async def chat(request: ChatRequest):
             ("human", "{question}")
         ])
         
-        chain = prompt | llm | StrOutputParser()
+        # Note: We use the raw LLM for streaming to access message chunks with usage data
+        # instead of StrOutputParser which only returns strings.
+        chain = prompt | llm
 
         async def generate():
-            async for chunk in chain.astream({
-                "context": context_data,
-                "history": history,
-                "question": user_question
-            }):
-                yield chunk
+            prompt_tokens = 0
+            completion_tokens = 0
+            total_tokens = 0
+            
+            try:
+                async for chunk in chain.astream({
+                    "context": context_data,
+                    "history": history,
+                    "question": user_question
+                }):
+                    # Extract usage metadata if present (usually in the last chunk with stream_options)
+                    if hasattr(chunk, 'usage_metadata') and chunk.usage_metadata:
+                        usage = chunk.usage_metadata
+                        prompt_tokens = usage.get("input_tokens", 0)
+                        completion_tokens = usage.get("output_tokens", 0)
+                        total_tokens = usage.get("total_tokens", 0)
+                    
+                    # Yield the content
+                    if chunk.content:
+                        yield chunk.content
+
+                # Calculate latency after stream finishes
+                latency_ms = int((time.time() - start_time) * 1000)
+                
+                background_tasks.add_task(
+                    send_posthog_event,
+                    "ai_inference_success",
+                    {
+                        "distinct_id": session_id,
+                        "session_id": session_id,
+                        "latency_ms": latency_ms,
+                        "prompt_tokens": prompt_tokens,
+                        "completion_tokens": completion_tokens,
+                        "total_tokens": total_tokens,
+                        "model_version": model_version
+                    }
+                )
+
+            except Exception as e:
+                error_trace = traceback.format_exc()
+                background_tasks.add_task(
+                    send_posthog_event,
+                    "ai_inference_failed",
+                    {
+                        "distinct_id": session_id,
+                        "session_id": session_id,
+                        "error_type": type(e).__name__,
+                        "error_message": str(e),
+                        "stack_trace": error_trace
+                    }
+                )
+                raise e
 
         return StreamingResponse(generate(), media_type="text/plain")
 
     except Exception as e:
+        error_trace = traceback.format_exc()
+        background_tasks.add_task(
+            send_posthog_event,
+            "ai_inference_failed",
+            {
+                "distinct_id": session_id,
+                "session_id": session_id,
+                "error_type": type(e).__name__,
+                "error_message": str(e),
+                "stack_trace": error_trace
+            }
+        )
         print(f"ERROR: {e}")
         raise HTTPException(status_code=500, detail=str(e))
 
