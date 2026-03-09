@@ -65,7 +65,11 @@ def send_posthog_event(event_name: str, properties: dict):
     Crucial for Vercel Serverless to ensure event is sent before container freeze.
     """
     try:
-        posthog.capture(properties.get("distinct_id", "backend_user"), event_name, properties)
+        posthog.capture(
+            distinct_id=properties.get("distinct_id", "backend_user"), 
+            event=event_name, 
+            properties=properties
+        )
         posthog.flush()
     except Exception as e:
         print(f"PostHog Error: {e}")
